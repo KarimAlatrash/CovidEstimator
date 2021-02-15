@@ -3,6 +3,10 @@
 #include "data.hpp"
 #include "COVID_new_cases.hpp"
 
+//https://towardsdatascience.com/an-introduction-to-support-vector-regression-svr-a3ebc1672c2
+//THAT ARTICLE ^^ TELLS YOU HOW TO ADD ERROR TOLERANCE TO YOUR DATA SET
+
+
 // Function declarations
 int main();
 double test( double array[], unsigned int capacity );
