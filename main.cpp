@@ -24,8 +24,10 @@ double test( double array[],
              unsigned int capacity ) {
   COVID_new_cases obj{};
   double squared_error{ 0.0 };
-
+  //unsigned int day_counter{0};
   for ( unsigned int k{capacity - 1}; k > 0; --k ) {
+      //std::cout <<"day count is: "<<day_counter<<std::endl;
+      //day_counter++;
     double prediction { obj.next_datum( array[k] ) };
     squared_error +=
         std::pow( prediction - array[k - 1], 2.0 );

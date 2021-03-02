@@ -6,12 +6,12 @@
 
 dataset::dataset(unsigned int max_length) {
     data_points = new queue(max_length);
-    cubic_model = nullptr;
+    data_model = nullptr;
 }
 
 dataset::~dataset() {
     delete data_points;
-    delete cubic_model;
+    delete data_model;
 }
 double* dataset::data_as_array() {
     return data_points->get_array();
@@ -22,25 +22,52 @@ void dataset::add_data_point(double new_data_point) {
 unsigned int dataset::current_data_size() {
     return data_points->get_current_length();
 }
-vector* dataset::create_cubic_model() {
-    double* x_vals = new double[current_data_size()];
-    for (int i = 0; i < current_data_size(); i++) {
-        x_vals[i] = i;
+vector* dataset::create_model(unsigned int max_order) {
+
+    unsigned int data_size = current_data_size();
+    double* data_array = data_as_array();
+
+    /*for (int i = 0; i<data_size;i++) {
+        std::cout << data_array[i] << ", ";
     }
+    std::cout << std::endl;*/
+
+    //sets # of columns based on the amount of data
+    unsigned int cols;
+    if (data_size >=max_order) cols = max_order+1;
+    else cols = data_size; //minimum 2 columns!
 
     //creates vandermonde with all elements that are currently stored (up to max value)
-    matrix vander_O3 = matrix::vander(current_data_size(),5, x_vals);
+    matrix vander = matrix::vander(data_size, cols, x_vals);
 
-    vector v = vector{current_data_size(), data_as_array()};
-    v = (transpose(vander_O3)*vander_O3).solve( transpose(vander_O3)*v );
-    double coeffs[4] = {v(0),v(1),v(2),v(3)};
+    vector v = vector{data_size, data_array};
+    std::cout<<v<<std::endl;
+    /*matrix t = transpose(vander) * vander;
+    vector l = transpose(vander)*v;
+    v=t.solve(l);
+    std::cout <<"v is: " << v<<std::endl;
+    std::cout <<"vander is: " << vander<<std::endl;
+    */
 
-    if (cubic_model != nullptr) {
-        delete cubic_model;
+    //solves the matrix for the LSBF polynomial
+    v = (transpose(vander) * vander).solve(transpose(vander) * v );
+    double* coeffs = new double[max_order+1]();
+
+    std::cout << "model coefficients are: ";
+    for (int i = 0; i < cols; ++i) {
+        coeffs[i] = v(i);
+        std::cout<<coeffs[i]<<", ";
     }
-    cubic_model = new vector(4, coeffs);
+    std::cout<<std::endl;
 
-    delete[] x_vals;
 
-    return cubic_model;
+
+    if (data_model != nullptr) {
+        delete data_model;
+    }
+    data_model = new vector(max_order+1, coeffs);
+
+    delete[] coeffs;
+
+    return data_model;
 }

@@ -15,11 +15,11 @@ private:
     void dequeue();
     double* current_array = nullptr;
     unsigned int max_length_;
-    unsigned int current_length_;
+    unsigned int current_length_ = 0;
 public:
     queue(unsigned int max_length);
     ~queue();
-    void add_element(double new_element);
+    void add_element(double new_element_val);
     double* get_array();
     unsigned int get_current_length();
 };
