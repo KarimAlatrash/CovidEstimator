@@ -7,11 +7,9 @@ class COVID_new_cases {
   double next_datum( double x );
   bool at_extreme() const;
 private:
-    dataset data{60};
+    dataset data{90};
     int max_order = 3;
     static double horners_eval(vector* poly, int order, double x_val);
-    //double* cut_noise(vector cubic_lsbf_poly, double data[], unsigned int length);
-  //double x_vals[60] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59};
 };
 
 // This is the worst-case predictor. If you do
@@ -21,8 +19,7 @@ private:
 // interpolated between these two values.
 
 double COVID_new_cases::next_datum( double x ) {
-    std::cout <<std::endl;
-    //std::cout << "current day value is: " << x <<std::endl;
+
 
     data.add_data_point(x);
     vector* data_model = data.create_model(max_order);
@@ -30,9 +27,8 @@ double COVID_new_cases::next_datum( double x ) {
     //evaluate the cubic function at length+1
     double next_approx = horners_eval(data_model, max_order, data.current_data_size());
 
-    //if(next_approx < 0 ) {
-        std::cout << "current data count is: " <<data.current_data_size()<< std::endl;
-    //}
+    std::cout <<std::endl;
+    std::cout << "current day value is: " << x <<std::endl;
     std::cout << "next approximation is: " << next_approx <<std::endl;
     return next_approx;
 

@@ -22,6 +22,12 @@ public:
     void add_element(double new_element_val);
     double* get_array();
     unsigned int get_current_length();
+    node* get_front() {
+        return front;
+    }
+    node* get_back() {
+        return back;
+    }
 };
 
 
