@@ -10,8 +10,8 @@ class COVID_new_cases {
 
 
 private:
-    dataset data{25}; //best length is 25
-    int max_order{1}; //best order is 1
+    dataset data{8}; //best length is 25
+    int max_order{0}; //best order is 1
     static double horners_eval(vector* poly, int order, double x_val);
 
 };

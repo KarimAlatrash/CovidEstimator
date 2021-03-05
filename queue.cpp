@@ -29,12 +29,24 @@ void queue::enqueue(node* new_elem) {
         back->set_previous(new_elem);
         back = new_elem;
     }
+    current_length_++;
 }
 
 void queue::dequeue() {
-    node* temp = front;
-    front = front->get_previous();
-    delete temp;
+    if(front == nullptr || front->get_next() == nullptr) {
+        delete front;
+        front = nullptr;
+        back = nullptr;
+        current_length_=0;
+    }
+    else {
+        node* temp = front;
+        front = front->get_previous();
+        delete temp;
+        current_length_--;
+    }
+
+
 }
 
 void queue::add_element(double new_element_val) {
@@ -45,7 +57,7 @@ void queue::add_element(double new_element_val) {
     }
     else {
         enqueue(new_element_);
-        current_length_++;
+
     }
 }
 

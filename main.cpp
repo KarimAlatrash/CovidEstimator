@@ -9,10 +9,13 @@ double test( double array[], unsigned int capacity );
 
 // Function definitions
 int main() {
+    double avg{0};
     for ( std::size_t k{0}; k < DATA_MAX; ++k ) {
-        std::cout << test( data[k], 1000 )
-                  << std::endl;
+        avg+=test( data[k], 1000 );
+        //std::cout << test( data[k], 1000 )
+        //          << std::endl;
     }
+    std::cout<<"Avg: "<<avg/DATA_MAX<<std::endl;
     return 0;
 }
 // Calculate the root-mean-squared-error (RMSE).

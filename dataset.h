@@ -29,6 +29,8 @@ public:
     vector* create_model(unsigned int max_order);
 
     unsigned int current_cleansed_data_size();
+
+    double average(queue *data);
 };
 
 

@@ -58,6 +58,16 @@ void dataset::add_data_point(double new_data_point) {
     raw_data_points->add_element(new_data_point);
 }
 
+double dataset::average(queue* data) {
+    node* temp = data->get_back();
+    double avg{0};
+    while (temp!=nullptr) {
+        avg+=temp->value;
+        temp = temp->get_next();
+    }
+    return avg/data->get_current_length();
+}
+
 unsigned int dataset::current_data_size() {
     return raw_data_points->get_current_length();
 }
@@ -81,35 +91,42 @@ vector* dataset::create_model(unsigned int max_order) {
     //unsigned int data_size = raw_data_points->get_current_length(); //raw dataa points
     //double* data_array = raw_data_points->get_array();
 
-
-    //sets # of columns based on the amount of data
-    unsigned int cols;
-    if (data_size >max_order) cols = max_order+1;
-    else cols = data_size; //minimum 2 columns!
-
-    //creates vandermonde with all elements that are currently stored (up to max value)
-    matrix vander = matrix::vander(data_size, cols, x_vals);
-    vector v = vector{data_size, data_array};
-    //std::cout <<"v is: " << v<<std::endl;
-    //std::cout <<"vander is: " << vander<<std::endl;
-    matrix b = transpose(vander) * vander;
-    vector h = transpose(vander) * v;
-    vector return_vec = b.solve(h);
-
-    double* coeffs = new double[max_order+1]();
-
-    //std::cout << "solution coefficients are: "<<v<<std::endl;
-    //std::cout << "model coefficients are: ";
-    for (int i = 0; i < cols; ++i) {
-        coeffs[i] = v(i);
-        //std::cout<<coeffs[i]<<", ";
+    if(max_order == 0) {
+        data_model = new vector(1, {average(raw_data_points)} );
     }
-    //std::cout<<std::endl;
+    else {
+        //sets # of columns based on the amount of data
+        unsigned int cols;
+        if (data_size >max_order) cols = max_order+1;
+        else cols = data_size; //minimum 2 columns!
+
+        //creates vandermonde with all elements that are currently stored (up to max value)
+        matrix vander = matrix::vander(data_size, cols, x_vals);
+        vector v = vector{data_size, data_array};
+        //std::cout <<"v is: " << v<<std::endl;
+        //std::cout <<"vander is: " << vander<<std::endl;
+        matrix b = transpose(vander) * vander;
+        vector h = transpose(vander) * v;
+        vector return_vec = b.solve(h);
+
+        double* coeffs = new double[max_order+1]();
+
+        std::cout << "solution coefficients are: "<<v<<std::endl;
+        //std::cout << "model coefficients are: ";
+        for (int i = 0; i < cols; ++i) {
+            coeffs[i] = v(i);
+            //std::cout<<coeffs[i]<<", ";
+        }
+        //std::cout<<std::endl;
 
 
-    data_model = new vector(max_order+1, coeffs);
+        data_model = new vector(max_order+1, coeffs);
 
-    delete[] coeffs;
+        delete[] coeffs;
+
+
+    }
 
     return data_model;
+
 }
