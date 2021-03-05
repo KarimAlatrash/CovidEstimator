@@ -16,6 +16,7 @@ queue::~queue() {
         temp = back;
     }
     delete front;
+    delete[] current_array;
 }
 void queue::enqueue(node* new_elem) {
 

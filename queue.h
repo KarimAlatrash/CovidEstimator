@@ -28,6 +28,9 @@ public:
     node* get_back() {
         return back;
     }
+    unsigned int get_max_length() {
+        return max_length_;
+    }
 };
 
 
